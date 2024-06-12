@@ -1,4 +1,3 @@
-import streamlit_authenticator as stauth
 from PIL import Image
 from PIL import Image
 import streamlit as st
@@ -11,7 +10,7 @@ import ekgdata as ekg
 import person
 
 #Login funktion som kollar om användaren finns i databasen och om lösenordet stämmer
-def login():st.set_page_config(layout="wide")
+def login():st.set_page_config(page_title="Welcome", page_icon=":open_hands:")
 
 # Lade alle Personen
 person_names = rpd.get_person_list(rpd.load_person_data())
@@ -40,4 +39,4 @@ with col2:
     st.write(f"Geburtsjahr: {person_birthyear} ")
 
 with col3:
-     person_id = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["id"]
+    person_id = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["id"]

@@ -34,7 +34,7 @@ st.write("## Versuchsperson auswählen")
 
 
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 
 with col1:
     # Selectbox erstellen
@@ -62,7 +62,7 @@ with col1:
     
 
 
-with col2:
+with col3:
 
     # Pfad zur Bilddatei
     if st.session_state.aktuelle_versuchsperson in person_names:
@@ -73,7 +73,19 @@ with col2:
 
     from PIL import Image
     image = Image.open(st.session_state.picture_path)
+
+# # HTML String für Bild
+#     st.markdown(
+#         f"""
+#         <div style="display: flex; justify-content: center;">
+#             <img src="{st.session_state.picture_path}" alt="{st.session_state.aktuelle_versuchsperson}" style="max-width: 100%;">
+#         </div>
+#         """,
+#         unsafe_allow_html=True
+#     )
+
     st.image(image, caption=st.session_state.aktuelle_versuchsperson)
+    # st.caption(st.session_state.aktuelle_versuchsperson)
 
 
 

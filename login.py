@@ -25,8 +25,19 @@ if 'aktuelle_versuchsperson' not in st.session_state:
 ## Anlegen des Session State. Bild, wenn es kein Bild gibt
 if 'picture_path' not in st.session_state:
     st.session_state.picture_path = 'data/pictures/none.jpg'
-    st.session_state.aktuelle_versuchsperson = st.selectbox(
-        'Versuchsperson',
-        options = person_names, key="sbVersuchsperson")
-    # Name der Versuchsperson
-    selected_person = st.session_state.aktuelle_versuchsperson
+
+col1, col2, col3 = st.columns(3) 
+    
+with col1:  
+        st.session_state.aktuelle_versuchsperson = st.selectbox(
+            'Versuchsperson',
+            options = person_names, key="sbVersuchsperson")
+        # Name der Versuchsperson
+        selected_person = st.session_state.aktuelle_versuchsperson
+
+with col2:
+    person_birthyear = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)['date_of_birth']
+    st.write(f"Geburtsjahr: {person_birthyear} ")
+
+with col3:
+     person_id = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["id"]

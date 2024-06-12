@@ -10,6 +10,8 @@ import ekgdata as ekg
 import person
 
 
+st.set_page_config(layout="wide")
+
 # Lade alle Personen
 person_names = rpd.get_person_list(rpd.load_person_data())
 
@@ -30,35 +32,50 @@ if 'picture_path' not in st.session_state:
 st.write("# EKG APP")
 st.write("## Versuchsperson auswählen")
 
-# Selectbox erstellen
-st.session_state.aktuelle_versuchsperson = st.selectbox(
-    'Versuchsperson',
-    options = person_names, key="sbVersuchsperson")
-
-# Name der Versuchsperson
-selected_person = st.session_state.aktuelle_versuchsperson
-st.write("Der Name ist: ", st.session_state.aktuelle_versuchsperson)
-
-# TODO: Personendaten anzeigen
-person_birthyear = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)['date_of_birth']
-st.write(f"Geburtsjahr: {person_birthyear} ")
-
-# Pfad zur Bilddatei
-if st.session_state.aktuelle_versuchsperson in person_names:
-    st.session_state.picture_path = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["picture_path"]
-    # st.write("Der Pfad ist: ", st.session_state.picture_path)
 
 
+col1, col2 = st.columns(2)
 
-from PIL import Image
-image = Image.open(st.session_state.picture_path)
-st.image(image, caption=st.session_state.aktuelle_versuchsperson)
+with col1:
+    # Selectbox erstellen
+    st.session_state.aktuelle_versuchsperson = st.selectbox(
+        'Versuchsperson',
+        options = person_names, key="sbVersuchsperson")
+    # Name der Versuchsperson
+    selected_person = st.session_state.aktuelle_versuchsperson
+    # st.write("Der Name ist: ", st.session_state.aktuelle_versuchsperson)
+
+    # TODO: Personendaten anzeigen
+    person_birthyear = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)['date_of_birth']
+    st.write(f"Geburtsjahr: {person_birthyear} ")
+
+    # Öffne EKG-Daten
+    # TODO: Für eine Person gibt es ggf. mehrere EKG-Daten. Diese müssen über den Pfad ausgewählt werden können
+    # Vergleiche Bild und Person
+    current_egk_data = ekg.EKGdata(rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["ekg_tests"][0])
+
+    ekg_names = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["ekg_tests"]
+    # Selectbox für Auswahl des EKG-Tests erstellen
+    st.session_state.aktuelles_ekg = st.selectbox(
+        'EKG',
+        options = ekg_names, key="sbEKG")
+    
 
 
-#% Öffne EKG-Daten
-# TODO: Für eine Person gibt es ggf. mehrere EKG-Daten. Diese müssen über den Pfad ausgewählt werden können
-# Vergleiche Bild und Person
-current_egk_data = ekg.EKGdata(rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["ekg_tests"][0])
+with col2:
+
+    # Pfad zur Bilddatei
+    if st.session_state.aktuelle_versuchsperson in person_names:
+        st.session_state.picture_path = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["picture_path"]
+        # st.write("Der Pfad ist: ", st.session_state.picture_path)
+
+
+
+    from PIL import Image
+    image = Image.open(st.session_state.picture_path)
+    st.image(image, caption=st.session_state.aktuelle_versuchsperson)
+
+
 
 
 #%% EKG-Daten als Matplotlib Plot anzeigen

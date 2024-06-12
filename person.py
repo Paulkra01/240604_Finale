@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 
+
 class Person:
     
     @staticmethod
@@ -52,7 +53,6 @@ class Person:
         self.picture_path = person_dict["picture_path"]
         self.id = person_dict["id"]
         self.age = self.calc_age(self)
-        # self.sex = sex
         
     @staticmethod
     def calc_age(self):
@@ -78,9 +78,7 @@ class Person:
 
 
 if __name__ == "__main__":
-    # print("This is a module with some functions to read the person data")
     persons = Person.load_person_data()
     person_names = Person.get_person_list(persons)
-    # print(person_names)
-    # print(Person.find_person_data_by_name("Huber, Julian"))
+
     print(Person(Person.load_by_id(2)).age)

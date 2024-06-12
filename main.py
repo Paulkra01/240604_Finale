@@ -10,7 +10,8 @@ import ekgdata as ekg
 import person
 
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide",page_title="Hauptseite", page_icon=":bar_chart:")
+
 
 # Lade alle Personen
 person_names = rpd.get_person_list(rpd.load_person_data())

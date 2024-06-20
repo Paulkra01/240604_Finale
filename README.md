@@ -32,6 +32,8 @@
     
 ### Drag and Drop
 - Implementieren einer Drag-and-Drop-Funktionalität, um Benutzerinteraktionen zu erleichtern
+- Erstellen einer Dropbox in beiden Tabs inklusive "clear"-Funktion
+
 ## Gestalterische Punkte
 
 ### Mobile Ansicht

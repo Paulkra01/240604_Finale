@@ -17,7 +17,7 @@
 - Schieberegler zur Bestimmung des darzustellenden Zeitraums
 
 
-### Tab2: Leistungsanalyse
+### Tab2: Leistungsanalyse fit-Datei
 - **Gewichtseingabefeld:**
   - Analyse der relativen Leistung in W/kg
 - **FTP Eingabefeld:**

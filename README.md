@@ -18,10 +18,10 @@
 
 
 ### Tab2: Leistungsanalyse fit-Datei
-- **Gewichtseingabefeld:**
+- **Gewicht Eingabefeld:**
   - Analyse der relativen Leistung in W/kg
-- **FTP Eingabefeld:**
-  - Zur "Time-In-Zone"-Analyse
+- **FTP + maxHF Eingabefeld:**
+  - zur "Time-In-Zone"-Analyse 
 - **Leistungskurve:**
   - Anzeige der Leistungskurve
 - **Maximal-/Bestwerte Liste:**

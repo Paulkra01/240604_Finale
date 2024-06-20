@@ -9,12 +9,13 @@
   - Falls das Profil nicht vorhanden ist, wird ein neues Profil im Dictionary abgespeichert
   - Die Profil-ID wird in einer Selectbox angezeigt
 
-### Main Dashboard
+### Tab1: Main Dashboard
 - Nach erfolgreichem Login wird das Hauptdashboard angezeigt
-
-### Tab1: Profilinformationen
+- Verkürzen der Ladezeiten
 - Anzeigen des Profilbildes im Dashboard
-- Detailinformationen als Hover-Funktion verfügbar
+- Detailinformationen als Hover-Funktion verfügbar (ID, Geburtsdatum)
+- Schieberegler zur Bestimmung des darzustellenden Zeitraums
+
 
 ### Tab2: Leistungsanalyse
 - **Gewichtseingabefeld:**
@@ -25,7 +26,9 @@
   - Anzeige der Leistungskurve
 - **Maximal-/Bestwerte Liste:**
   - Liste der Maximal- und Bestwerte aus der Datei
-  - Zoom-Option bei Klick auf die Werte
+  - Zoom-Option bei Klick auf die Werte --> Darstellung der W
+- **Leistungsverteilung Balkendiagramm**
+  - inklusive Schieberegler zur Bestimmung der "Balkenbreite" (z.B. 25W)
     
 ### Drag and Drop
 - Implementieren einer Drag-and-Drop-Funktionalität, um Benutzerinteraktionen zu erleichtern

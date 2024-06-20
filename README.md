@@ -7,7 +7,7 @@
 - **Welcome Page mit Login-Option:**
   - Eingabefelder für Name und Geburtsjahr
   - Falls das Profil nicht vorhanden ist, wird ein neues Profil im Dictionary abgespeichert
-  - Die Profil-ID wird in einer Selectbox angezeigt
+
 
 ### Tab1: Main Dashboard
 - Nach erfolgreichem Login wird das Hauptdashboard angezeigt

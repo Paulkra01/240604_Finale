@@ -30,7 +30,7 @@
 - **Leistungsverteilung Balkendiagramm**
   - inklusive Schieberegler zur Bestimmung der "Balkenbreite" (z.B. 25W)
     
-### Drag and Drop
+### Drag and Drop / Upload-Button
 - Implementieren einer Drag-and-Drop-Funktionalität, um Benutzerinteraktionen zu erleichtern
 - Erstellen einer Dropbox in beiden Tabs inklusive "clear"-Funktion
 

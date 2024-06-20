@@ -3,9 +3,6 @@
 
 ## Technische Punkte
 
-### Drag and Drop
-- Implementieren einer Drag-and-Drop-Funktionalität, um Benutzerinteraktionen zu erleichtern
-
 ### Profilverwaltung
 - **Welcome Page mit Login-Option:**
   - Eingabefelder für Name und Geburtsjahr
@@ -29,7 +26,9 @@
 - **Maximal-/Bestwerte Liste:**
   - Liste der Maximal- und Bestwerte aus der Datei
   - Zoom-Option bei Klick auf die Werte
-
+    
+### Drag and Drop
+- Implementieren einer Drag-and-Drop-Funktionalität, um Benutzerinteraktionen zu erleichtern
 ## Gestalterische Punkte
 
 ### Mobile Ansicht

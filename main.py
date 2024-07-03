@@ -8,6 +8,9 @@ import json
 import read_person_data as rpd
 import ekgdata as ekg
 import person
+import fitparse
+import pandas as pd
+import fitdata as fit
 
 
 st.set_page_config(layout="wide",page_title="Hauptseite", page_icon=":bar_chart:")
@@ -95,17 +98,89 @@ def tab1_content():
     #%% EKG-Daten als Matplotlib Plot anzeigen
     # Nachdem die EKG, Daten geladen wurden
     # Erstelle den Plot als Attribut des Objektes
-    fig = current_egk_data.make_plot()
-    # Zeige den Plot an
-    st.plotly_chart(fig, use_container_width=True)
+    if st.button("Graphen laden"):
+        fig = current_egk_data.make_plot()
+        # Zeige den Plot an
+        st.plotly_chart(fig, use_container_width=True)
+
+
+
+
+'''Zusatzaufgabe: Datenanalyse von fit-Dateien'''
+
+
 def tab2_content():
-    st.header("FIT-Dateien")
+    st.header("Leistungsanalyse")
+    st.write("test")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        ftp = st.number_input('Geben Sie Ihre Functional Threshold Power (FTP) ein:', min_value=0)
+        
+
+
+    with col2:
+        max_hr = st.number_input('Geben Sie Ihre maximale Herzfrequenz ein:', min_value=0)
+
+    with col3:
+        weight = st.number_input('Geben Sie Ihr Körpergewicht in kg ein:', min_value=0)
+
+    st.title("FIT-Datei Drag-and-Drop")
+
+    # Datei-Uploader für FIT-Dateien
+    uploaded_file = st.file_uploader("Ziehe eine FIT-Datei hierher oder klicke, um eine Datei auszuwählen.", type=["fit"])
+
+    if uploaded_file is not None:
+        # Zeige Dateidetails an
+        st.write("Dateiname:", uploaded_file.name)
+        st.write("Dateityp:", uploaded_file.type)
+        st.write("Dateigröße:", uploaded_file.size, "Bytes")
+
+        # Lade und analysiere die FIT-Datei
+        time_values, power_values, hr_values = fit.load_fitfile(uploaded_file)
+
+
+
+    if st.button("Graph laden"):
+        if ftp > 0 and max_hr > 0:
+            # Erstelle einen Plotly-Graphen für die Leistungsdaten
+            fig = fit.create_power_plot(time_values, power_values)
+            st.plotly_chart(fig)
+
+            # Berechne die Zeit in den verschiedenen Leistungszonen
+            power_zones = fit.get_power_zones(ftp)
+            time_in_power_zones = fit.calculate_time_in_zones(power_values, power_zones)
+
+            # Berechne die Zeit in den verschiedenen Herzfrequenzzonen
+            hr_zones = fit.get_heart_rate_zones(max_hr)
+            time_in_hr_zones = fit.calculate_time_in_zones(hr_values, hr_zones)
+
+            # Erstelle Balkendiagramme für die Zeit in den Zonen
+            power_bar_chart = fit.create_time_in_zone_bar_chart(time_in_power_zones, 'Time in Power Zones')
+            hr_bar_chart = fit.create_time_in_zone_bar_chart(time_in_hr_zones, 'Time in Heart Rate Zones')
+
+            # Zeige die Balkendiagramme nebeneinander an
+            col1, col2 = st.columns(2)
+            col1.plotly_chart(power_bar_chart, use_container_width=True)
+            col2.plotly_chart(hr_bar_chart, use_container_width=True)
+
+            # Berechne die fortlaufenden Bestwerte über alle Zeitintervalle
+            best_values = fit.calculate_continuous_best_values(time_values, power_values)
+
+            # Erstelle und zeige das Liniendiagramm für die Bestwerte an
+            best_values_plot = fit.create_continuous_best_values_plot(best_values)
+            st.plotly_chart(best_values_plot)
+
+        else:
+            st.error("Bitte geben Sie sowohl einen gültigen FTP-Wert als auch eine gültige maximale Herzfrequenz ein.")
+
 
 def main():
     st.title('Datenauswertung')
 
     # Tab-Titel definieren
-    tab_titles = ['EKG-Daten', 'Fit-Dateien']
+    tab_titles = ['EKG-Daten', 'Leistungsanalyse']
 
     # Tabs erstellen
     tabs = st.tabs(tab_titles)

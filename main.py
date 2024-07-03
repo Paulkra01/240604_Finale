@@ -141,7 +141,6 @@ def tab2_content():
         time_values, power_values, hr_values = fit.load_fitfile(uploaded_file)
 
 
-
     if st.button("Graph laden"):
         if ftp > 0 and max_hr > 0:
             # Erstelle einen Plotly-Graphen für die Leistungsdaten
@@ -165,16 +164,24 @@ def tab2_content():
             col1.plotly_chart(power_bar_chart, use_container_width=True)
             col2.plotly_chart(hr_bar_chart, use_container_width=True)
 
+            # Auswahl der Darstellung für die Bestwerte (Watt oder W/kg)
+            display_mode = st.radio("Bestwerte anzeigen als:", ("Watt", "W/kg"))
+
             # Berechne die fortlaufenden Bestwerte über alle Zeitintervalle
             best_values = fit.calculate_continuous_best_values(time_values, power_values)
+
+            if display_mode == "W/kg":
+                if weight > 0:
+                    best_values = [(interval, power / weight) for interval, power in best_values]
+                else:
+                    st.error("Bitte geben Sie ein gültiges Körpergewicht ein.")
+                    best_values = [(interval, 0) for interval, power in best_values]
 
             # Erstelle und zeige das Liniendiagramm für die Bestwerte an
             best_values_plot = fit.create_continuous_best_values_plot(best_values)
             st.plotly_chart(best_values_plot)
-
         else:
             st.error("Bitte geben Sie sowohl einen gültigen FTP-Wert als auch eine gültige maximale Herzfrequenz ein.")
-
 
 def main():
     st.title('Datenauswertung')

@@ -33,8 +33,10 @@ def tab1_content():
     # Button zum Einloggen
     login_button = st.button("Login")
     # Button zum Speichern eines neuen Benutzernamens
-    save_button = st.button("Als neues Profil speichern")
-
+    
+    if login_button:
+        if st.button("Zur Login-Seite wechseln"):
+            st.experimental_set_query_params(page= "main.py")
     # Verarbeiten der Anmeldeinformationen, wenn der Button gedrückt wird
     if login_button:
         if username == "user1" and password == "password":

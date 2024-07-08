@@ -1,3 +1,5 @@
-pages:
-  - welcome.py
-  - main.py
+
+- page: main
+  script: main.py
+- page: login
+  script: login.py

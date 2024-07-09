@@ -8,79 +8,113 @@ import json
 import read_person_data as rpd
 import ekgdata as ekg
 import person
-
+import os
+import subprocess
+import sys
+import webbrowser
+import datetime
 # Lade alle Personen
 person_names = rpd.get_person_list(rpd.load_person_data())
-print (person_names) 
+
 
 #Login funktion som kollar om användaren finns i databasen och om lösenordet stämmer
-st.set_page_config(layout="centered", page_title="Welcome", page_icon=":open_hands:")
+#st.set_page_config(layout="centered", page_title="Welcome", page_icon=":open_hands:")
 
 st.title("Login")
 
-def tab1_content():
+def login_tab1_content():
     
     # Dropdown-Menü für den Benutzernamen mit Vorschlägen
-    username = st.selectbox("Benutzername", person_names)
-
+        username = st.selectbox("Benutzername", person_names)
+    
     # Texteingabefeld für neuen Benutzernamen
     
     # Passwort-Eingabefeld
-    password = st.text_input("Passwort", type="password")
+        password = st.text_input("Passwort", type="password")
 
 
 
     # Button zum Einloggen
-    login_button = st.button("Login")
+        login_page = st.button("Login")
     # Button zum Speichern eines neuen Benutzernamens
     
-    if login_button:
-        if st.button("Zur Login-Seite wechseln"):
-            st.experimental_set_query_params(page= "main.py")
     # Verarbeiten der Anmeldeinformationen, wenn der Button gedrückt wird
-    if login_button:
-        if username == "user1" and password == "password":
-            st.success("Erfolgreich eingeloggt")
-            # Weitere Aktionen nach erfolgreichem Login
-        else:
-            st.error("Falscher Benutzername oder falsches Passwort")
+    
+        if login_page:
+        # Überprüfen, ob der Benutzername und das Passwort übereinstimmen
+            if username in person_names and password == "password":
+                st.success("Erfolgreich eingeloggt")
+                return username
+            else:
+                st.error("Falscher Benutzername oder falsches Passwort")
+                return "error"
+           
 
-def tab2_content():
-    # Eingabefelder für neuen Benutzernamen und Geburtsdatum
+def login_tab2_content():
     firstname = st.text_input("Vorname")
     lastname = st.text_input("Nachname")
-    date_of_birth = st.text_input("Geburtsjahr") 
-    
-    # Button zum Speichern
-    save_button = st.button("Speichern")
+    date_of_birth = st.number_input("Geburtsjahr", min_value=1900, max_value=2024, step=1)
+    # Funktion, um eine neue Person hinzuzufügen
+    save = st.button("Speichern")
+    if save:
+        if save:
+            # Erstellen eines neuen Person-Objekts mit den eingegebenen Daten
+            new_person = person.Person(
+            id=len(person_names) + 1,
+            date_of_birth=date_of_birth,
+            firstname=firstname,
+            lastname=lastname,
+            picture_path="data/pictures/tb.jpg",
+            ekg_tests=[]
+            )
+            
+            # Hinzufügen des aktuellen Datums zum neuen Person-Objekt
+            current_date = datetime.date.today().strftime("%d.%m.%Y")
+            new_person.ekg_tests.append({
+            "id": len(person_names) + 1,
+            "date": current_date,
+            "result_link": "data/ekg_data/01_Ruhe.txt"
+            })
+            
+            # Speichern des neuen Person-Objekts in der JSON-Datei
+            with open("path/to/your/json/file.json", "a") as file:
+                json.dump(new_person.to_dict(), file)
+                file.write("\n")
+            
+            # Erfolgsmeldung anzeigen
+            st.success("Person erfolgreich gespeichert")
+            # Erstellen eines neuen Person-Objekts mit den eingegebenen Daten
+            new_person = person.Person(
+                id=len(person_names) + 1,
+                date_of_birth=date_of_birth,
+                firstname=firstname,
+                lastname=lastname,
+                picture_path="data/pictures/tb.jpg",
+                ekg_tests=[]
+            )
+            
+            # Hinzufügen des aktuellen Datums zum neuen Person-Objekt
+            current_date = datetime.date.today().strftime("%d.%m.%Y")
+            new_person.ekg_tests.append({
+                "id": 1,
+                "date": current_date,
+                "result_link": "data/ekg_data/01_Ruhe.txt"
+            })
+            
+            # Speichern des neuen Person-Objekts in der JSON-Datei
+            with open("path/to/your/json/file.json", "a") as file:
+                json.dump(new_person.to_dict(), file)
+                file.write("\n")
+            
+            # Erfolgsmeldung anzeigen
+            st.success("Person erfolgreich gespeichert")
 
-    if save_button:
-        # Lade vorhandene Benutzerdaten
-        person_data = rpd.load_person_data()
-
-        # Generiere eine neue ID für den Benutzer
-        if person_data:
-            new_id = max(person_data.keys()) + 1
-        else:
-            new_id = 1
-        
-        # Erstelle ein neues Person-Objekt mit den eingegebenen Daten
-        new_person = person.Person(new_id, firstname, lastname, date_of_birth)
-        
-        # Lade vorhandene Benutzerdaten
-        person_data = rpd.load_person_data()
-
-        # Füge den neuen Eintrag zur Datenbank hinzu
-        person_data[new_id] = new_person.to_dict()
-
-        # Speichere die aktualisierten Benutzerdaten
-        rpd.save_person_data(person_data)
-# Verarbeiten des neuen Benutzernamens, wenn der Button gedrückt wird
+   
  
 
     
 
-def main():
+def login_page():
 
     # Tab-Titel definieren
     tab_titles = ['Benutzer aufrufen', 'Benutzer erstellen']
@@ -90,10 +124,9 @@ def main():
 
     # Inhalt für jeden Tab hinzufügen
     with tabs[0]:
-        tab1_content()
+        login_tab1_content()
 
     with tabs[1]:
-        tab2_content()
+        login_tab2_content()
 
-if __name__ == "__main__":
-    main()
+

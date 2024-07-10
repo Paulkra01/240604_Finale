@@ -24,11 +24,11 @@ collection = db["daten"]
 
 
 
-def insert_user(email, username, password):
+def insert_user(email, username, password, birthyear):
     
     date_joined = str(datetime.datetime.now())
 
-    return collection.insert_one({'email': email, 'username': username, 'password': password, 'date_joined': date_joined})
+    return collection.insert_one({'email': email, 'username': username, 'password': password, 'date_joined': date_joined, 'birthyear': birthyear})
 
 def fetch_users():
     try:
@@ -44,7 +44,8 @@ def fetch_users():
                 'email': user.get('email'),
                 'username': user.get('username'),
                 'password': user.get('password'),
-                'date_joined': user.get('date_joined')
+                'date_joined': user.get('date_joined'),
+                'birthyear': user.get('birthyear')
             }
 
         return users_dict
@@ -52,7 +53,13 @@ def fetch_users():
     except Exception as e:
         print(f"Fehler beim Abrufen der Benutzer: {e}")
         return None
-
+def get_user_birthyear():
+    
+    users = collection.find({})
+    birthyears = []
+    for user in users:
+        birthyears.append(user.get('birthyear'))
+    return birthyears
 def get_user_emails():
     
     users = collection.find({})
@@ -88,6 +95,7 @@ def sign_up():
         username = st.text_input(':blue[Username]', placeholder='Gewünschten Username eingeben')
         password1 = st.text_input(':blue[Password]', placeholder='Passwort eingeben', type='password')
         password2 = st.text_input(':blue[Confirm Password]', placeholder='Passwort bestätigen', type='password')
+        birthyear = st.text_input(':blue[Geburtsjahr]', placeholder='Geburtsjahr eingeben')
         button = st.form_submit_button()
         if email and username and password1 and password2:
             if validate_email(email):
@@ -99,15 +107,16 @@ def sign_up():
                             if len(username) >= 2:
                                 if len(password1) >= 6:
                                     if password1 == password2:
-                                        if button:
-                                            # Add User to DB
-                                            hashed_password = password2
-                                            insert_user(email, username, hashed_password)
-                                            with st.spinner('Account wird erstellt...'):
-                                                time.sleep(2)
-                                                
-                                            st.success('Account erfolgreich erstellt !!')
-                                            # st.balloons()
+                                        if birthyear>=1900 and birthyear<=2021:
+                                            if button:
+                                                # Add User to DB
+                                                hashed_password = password2
+                                                insert_user(email, username, hashed_password, birthyear)
+                                                with st.spinner('Account wird erstellt...'):
+                                                    time.sleep(2)
+                                                    
+                                                st.success('Account erfolgreich erstellt !!')
+                                            
                                     else:
                                         st.warning('Passwort stimmt nicht überein')
                                 else:

@@ -137,7 +137,7 @@ try:
 
                 def tab2_content():
                     
-                            st.header("Leistungsanalyse")
+                            st.header("Leistungsanalyse von Athlet*innen")
 
                             col1, col2, col3 = st.columns(3)
 

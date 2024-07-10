@@ -68,10 +68,10 @@ def get_user_emails():
     Fetch User Emails
     :return List of user emails:
     """
-    users = db.fetch()
+    users = collection.find({})
     emails = []
     for user in users.items:
-        emails.append(user['key'])
+        emails.append(user.get('email'))
     return emails
 
 
@@ -80,10 +80,10 @@ def get_usernames():
     Fetch Usernames
     :return List of user usernames:
     """
-    users = db.fetch()
+    users = collection.find({})
     usernames = []
     for user in users.items:
-        usernames.append(user['key'])
+        usernames.append(user.get('username'))
     return usernames
 
 
@@ -120,7 +120,7 @@ def sign_up():
         username = st.text_input(':blue[Username]', placeholder='Enter Your Username')
         password1 = st.text_input(':blue[Password]', placeholder='Enter Your Password', type='password')
         password2 = st.text_input(':blue[Confirm Password]', placeholder='Confirm Your Password', type='password')
-
+        button = st.form_submit_button()
         if email:
             if validate_email(email):
                 if email not in get_user_emails():
@@ -129,11 +129,12 @@ def sign_up():
                             if len(username) >= 2:
                                 if len(password1) >= 6:
                                     if password1 == password2:
+                                        if button:
                                         # Add User to DB
-                                        hashed_password = stauth.Hasher([password2]).generate()
-                                        insert_user(email, username, hashed_password[0])
-                                        st.success('Account created successfully!!')
-                                        st.balloons()
+                                            hashed_password = stauth.Hasher([password2]).generate()
+                                            insert_user(email, username, hashed_password[0])
+                                            st.success('Account created successfully!!')
+                                            st.balloons()
                                     else:
                                         st.warning('Passwords Do Not Match')
                                 else:

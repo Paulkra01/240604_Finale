@@ -47,10 +47,12 @@ def calculate_time_in_zones(values, zones):
     time_in_zones = {zone: time / 60 for zone, time in time_in_zones.items()}
     return time_in_zones
 
-def create_time_in_zone_bar_chart(time_in_zones, title):
-    """Erstelle ein Balkendiagramm für die Zeit in den Zonen."""
+def create_time_in_zone_bar_chart(time_in_zones, title, c=None):
     df = pd.DataFrame(list(time_in_zones.items()), columns=['Zone', 'Time (min)'])
-    fig = px.bar(df, x='Zone', y='Time (min)', title=title, labels={'Time (min)': 'Time (min)'})
+    if c:
+        fig = px.bar(df, x='Zone', y='Time (min)', title=title, labels={'Time (min)': 'Time (min)'}, color=c)
+    else:
+        fig = px.bar(df, x='Zone', y='Time (min)', title=title, labels={'Time (min)': 'Time (min)'})
     return fig
 
 def get_power_zones(ftp):
@@ -95,8 +97,21 @@ def calculate_continuous_best_values(time_values, power_values):
 
     return best_values
 
-def create_continuous_best_values_plot(best_values):
+def create_PC(best_values):
     """Erstelle ein Liniendiagramm der fortlaufenden Bestwerte über verschiedene Zeitfenster."""
     df = pd.DataFrame(best_values, columns=['Interval (s)', 'Best Power (W)'])
-    fig = px.line(df, x='Interval (s)', y='Best Power (W)', title='Fortlaufende Bestwerte über verschiedene Zeitfenster', labels={'Best Power (W)': 'Best Power (W)'})
+    # fig = px.line(df, x='Interval (s)', y='Best Power (W)', title='Fortlaufende Bestwerte über verschiedene Zeitfenster', labels={'Best Power (W)': 'Best Power (W)'})
+    
+    fig = px.area(df, x='Interval (s)', y='Best Power (W)', title='Fortlaufende Bestwerte über verschiedene Zeitfenster')
+    fig.update_traces(fillcolor="rgba(185, 217, 230, 0.8)", line_color="rgba(93, 157, 181, 0.8)")
+    
+    fig.add_trace(go.Scatter(x=df['Interval (s)'], y=df['Best Power (W)'], name="Watt"))
+    fig.update_layout(hovermode='x unified')
+    
+    fig.update_layout(
+        xaxis_title="Time / s",
+        yaxis_title="Power / W",
+        # xaxis_type="log"
+    )
+    
     return fig

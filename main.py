@@ -164,15 +164,15 @@ try:
                             col1, col2, col3 = st.columns(3)
 
                             with col1:
-                                ftp = st.slider('FTP', 0, 500, 350)
+                                ftp = st.slider('ftp in W', 0, 500, 350)
                         
 
 
                             with col2:
-                                max_hr = st.number_input('Geben Sie Ihre maximale Herzfrequenz ein:', min_value=0)
+                                max_hr = st.slider('max heartrate in bpm', 0, 240, 195)
 
                             with col3:
-                                weight = st.number_input('Geben Sie Ihr Körpergewicht in kg ein:', min_value=0)
+                                weight = st.slider('weight in kg:', 0, 200, 72)
 
 
                             st.title("FIT-Datei Drag-and-Drop")
@@ -239,9 +239,9 @@ try:
 
                                 # Erstelle und zeige das Liniendiagramm für die Bestwerte basierend auf der Auswahl an
                                 if display_mode:
-                                    best_values_plot = fit.create_continuous_best_values_plot(best_values_wkg)
+                                    best_values_plot = fit.create_PC(best_values_wkg)
                                 else:
-                                    best_values_plot = fit.create_continuous_best_values_plot(best_values)
+                                    best_values_plot = fit.create_PC(best_values)
 
                                 st.plotly_chart(best_values_plot)
 
@@ -474,9 +474,9 @@ except Exception as e:
 
                     # Erstelle und zeige das Liniendiagramm für die Bestwerte basierend auf der Auswahl an
                     if display_mode:
-                        best_values_plot = fit.create_continuous_best_values_plot(best_values_wkg)
+                        best_values_plot = fit.create_PC(best_values_wkg)
                     else:
-                        best_values_plot = fit.create_continuous_best_values_plot(best_values)
+                        best_values_plot = fit.create_PC(best_values)
 
                     st.plotly_chart(best_values_plot)
 

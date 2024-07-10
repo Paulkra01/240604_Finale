@@ -128,7 +128,7 @@ def sign_up():
                                     if password1 == password2:
                                         if button:
                                             # Add User to DB
-                                            hashed_password = generate_password_hash(password2)
+                                            hashed_password = password2
                                             insert_user(email, username, hashed_password)
                                             st.success('Account created successfully!!')
                                             st.balloons()

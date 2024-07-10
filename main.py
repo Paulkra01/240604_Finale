@@ -15,9 +15,11 @@ import fitdata as fit
 st.set_page_config(layout="wide",page_title="Hauptseite", page_icon=":bar_chart:")
 import pickle
 from pathlib import Path
+from PIL import Image, ImageDraw, ImageOps
 import streamlit_authenticator as stauth
 from device_dection import add_device_detection
 from login import sign_up, fetch_users
+import streamlit_authenticator as stauth
 
 person_names = rpd.get_person_list(rpd.load_person_data())
 # Führe die Geräteerkennungsfunktion aus
@@ -44,28 +46,33 @@ try:
 
     email, authentication_status, username = Authenticator.login(':green[Login]', 'main')
 
+    info, info1 = st.columns(2)
+
     if not authentication_status:
         sign_up()
 
     if username:
-        st.sidebar.subheader(f'Welcome {username}')
-        Authenticator.logout('Log Out', 'sidebar')
+        if username in usernames:
+            if authentication_status:
+                # let User see app
+                st.sidebar.subheader(f'Welcome {username}')
+                Authenticator.logout('Log Out', 'sidebar')
 
-        st.subheader('This is the home page')
-        st.markdown(
-            """
-            ---
-            Created with ❤️ by SnakeByte
-            """
-        )
+                
 
-except Exception as e:
-    st.error(f"An error occurred: {str(e)}")
+            elif not authentication_status:
+                with info:
+                    st.error('Incorrect Password or username')
+            else:
+                with info:
+                    st.warning('Please feed in your credentials')
+        else:
+            with info:
+                st.warning('Username does not exist, Please Sign up')
 
-# Rest des Codes außerhalb des try-except-Blocks
+
+except:
     st.success('Refresh Page')
-
-
 # Lade alle Personen
 
 
@@ -97,7 +104,7 @@ except Exception as e:
                     st.session_state.picture_path = 'data/pictures/none.jpg'
 
         ## TODO: Session State für Pfad zu EKG Daten
-
+                
 
         # Überschrift
                 st.write("# EKG APP")
@@ -131,7 +138,7 @@ except Exception as e:
                         'EKG',
                         options = ekg_names, key="sbEKG")
             
-
+               
 
                 with col3:
 
@@ -176,6 +183,7 @@ except Exception as e:
 
 
     def tab2_content():
+        
                 st.header("Leistungsanalyse")
                 st.write("test")
 

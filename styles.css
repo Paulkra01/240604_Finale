@@ -1,0 +1,43 @@
+/* styles.css */
+/* Bild mit abgerundeten Ecken */
+img.rounded {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+/* Hover-Effekt */
+img.rounded:hover {
+    transform: scale(1.05); /* Vergrößert das Bild leicht beim Überfahren */
+}
+
+/* Tooltip-Stil für die ID und E-Mail */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* gestrichelte Unterstreichung */
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position des Tooltips - direkt über dem Bild */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

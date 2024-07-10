@@ -18,56 +18,95 @@ import re
 from deta import Deta
 from pymongo import MongoClient
 # Create a Deta instance
-import datetime
 import re
 import streamlit as st
 from pymongo import MongoClient
-
-# Verbindung zur MongoDB
+# MongoDB Client Setup
 client = MongoClient("mongodb+srv://jannisphl:Loewe2001@cluster0.woh3y3w.mongodb.net/")
 db = client["meine_datenbank"]
 collection = db["daten"]
 
 def insert_user(email, username, password):
+    """
+    Inserts Users into the DB
+    :param email:
+    :param username:
+    :param password:
+    :return User Upon successful Creation:
+    """
     date_joined = str(datetime.datetime.now())
-    return collection.insert_one({
-         'email': email,
-         'username': username,
-         'password': password,
-         'date_joined': date_joined
-     })
+
+    return db.put({'key': email, 'username': username, 'password': password, 'date_joined': date_joined})
+
 
 def fetch_users():
-    users = collection.find({}, {'_id': 0})  # Exclude _id field from results
-    return list(users)  # Convert cursor to list of dictionaries
+    """
+    Fetch Users
+    :return Dictionary of Users:
+    """
+    users = db.fetch()
+    return users.items
+
 
 def get_user_emails():
-    users = fetch_users()
-    emails = [user['email'] for user in users]
+    """
+    Fetch User Emails
+    :return List of user emails:
+    """
+    users = db.fetch()
+    emails = []
+    for user in users.items:
+        emails.append(user['key'])
     return emails
 
+
 def get_usernames():
-    users = fetch_users()
-    usernames = [user['username'] for user in users]
+    """
+    Fetch Usernames
+    :return List of user usernames:
+    """
+    users = db.fetch()
+    usernames = []
+    for user in users.items:
+        usernames.append(user['key'])
     return usernames
 
+
 def validate_email(email):
-    pattern = r"^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
-    return bool(re.match(pattern, email))
+    """
+    Check Email Validity
+    :param email:
+    :return True if email is valid else False:
+    """
+    pattern = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$" #tesQQ12@gmail.com
+
+    if re.match(pattern, email):
+        return True
+    return False
+
 
 def validate_username(username):
-    pattern = r"^[a-zA-Z0-9]*$"
-    return bool(re.match(pattern, username))
+    """
+    Checks Validity of userName
+    :param username:
+    :return True if username is valid else False:
+    """
+
+    pattern = "^[a-zA-Z0-9]*$"
+    if re.match(pattern, username):
+        return True
+    return False
+
 
 def sign_up():
-    with st.form(key='signup'):
-        st.subheader('Sign Up')
-        email = st.text_input('Email', placeholder='Enter Your Email')
-        username = st.text_input('Username', placeholder='Enter Your Username')
-        password1 = st.text_input('Password', placeholder='Enter Your Password', type='password')
-        password2 = st.text_input('Confirm Password', placeholder='Confirm Your Password', type='password')
+    with st.form(key='signup', clear_on_submit=True):
+        st.subheader(':green[Sign Up]')
+        email = st.text_input(':blue[Email]', placeholder='Enter Your Email')
+        username = st.text_input(':blue[Username]', placeholder='Enter Your Username')
+        password1 = st.text_input(':blue[Password]', placeholder='Enter Your Password', type='password')
+        password2 = st.text_input(':blue[Confirm Password]', placeholder='Confirm Your Password', type='password')
 
-        if st.form_submit_button('Sign Up'):
+        if email:
             if validate_email(email):
                 if email not in get_user_emails():
                     if validate_username(username):
@@ -75,9 +114,11 @@ def sign_up():
                             if len(username) >= 2:
                                 if len(password1) >= 6:
                                     if password1 == password2:
-                                        hashed_password = password1  # Hier sollte die Hash-Funktion verwendet werden
-                                        insert_user(email, username, hashed_password)
-                                        st.success('Account created successfully!')
+                                        # Add User to DB
+                                        hashed_password = stauth.Hasher([password2]).generate()
+                                        insert_user(email, username, hashed_password[0])
+                                        st.success('Account created successfully!!')
+                                        st.balloons()
                                     else:
                                         st.warning('Passwords Do Not Match')
                                 else:
@@ -86,6 +127,7 @@ def sign_up():
                                 st.warning('Username Too short')
                         else:
                             st.warning('Username Already Exists')
+
                     else:
                         st.warning('Invalid Username')
                 else:
@@ -93,25 +135,10 @@ def sign_up():
             else:
                 st.warning('Invalid Email')
 
-# Beispiel für die Verwendung
-if __name__ == '__main__':
-    sign_up()
+        btn1, bt2, btn3, btn4, btn5 = st.columns(5)
 
-
-
-# def login_tab1_content():
-    
-#     # Dropdown-Menü für den Benutzernamen mit Vorschlägen
-#         username = st.selectbox("Benutzername", person_names)
-    
-#     # Texteingabefeld für neuen Benutzernamen
-    
-#     # Passwort-Eingabefeld
-#         password = st.text_input("Passwort", type="password")
-
-if __name__ == "__main__":
-    main()
-
+        with btn3:
+            st.form_submit_button('Sign Up')
 #     # Button zum Einloggen
 #         login_page = st.button("Login")
 #     # Button zum Speichern eines neuen Benutzernamens

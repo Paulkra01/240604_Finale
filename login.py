@@ -40,12 +40,27 @@ def insert_user(email, username, password):
 
 
 def fetch_users():
-    """
-    Fetch Users
-    :return Dictionary of Users:
-    """
-    users = db.fetch()
-    return users.items
+    try:
+        # Alle Benutzer aus der Collection abrufen
+        users = collection.find({})
+
+        # Dictionary für die Benutzer initialisieren
+        users_dict = {}
+
+        # Daten in ein Dictionary umwandeln
+        for user in users:
+            users_dict[str(user.get('_id'))] = {
+                'email': user.get('email'),
+                'username': user.get('username'),
+                'password': user.get('password'),
+                'date_joined': user.get('date_joined')
+            }
+
+        return users_dict
+
+    except Exception as e:
+        print(f"Fehler beim Abrufen der Benutzer: {e}")
+        return None
 
 
 def get_user_emails():
@@ -78,11 +93,11 @@ def validate_email(email):
     :param email:
     :return True if email is valid else False:
     """
-    pattern = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$" #tesQQ12@gmail.com
+    # pattern = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$" #tesQQ12@gmail.com
 
-    if re.match(pattern, email):
-        return True
-    return False
+    # if re.match(pattern, email):
+    #     return True
+    return True
 
 
 def validate_username(username):

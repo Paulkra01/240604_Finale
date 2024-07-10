@@ -21,12 +21,12 @@
 - **Gewicht Eingabefeld:**
   - Analyse der relativen Leistung in W/kg
 - **FTP + maxHF Eingabefeld:**
-  - zur "Time-In-Zone"-Analyse 
+  - zur "Time-In-Zone"-Analyse
 - **Leistungskurve:**
-  - Anzeige der Leistungskurve
-- **Maximal-/Bestwerte Liste:**
-  - Liste der Maximal- und Bestwerte aus der Datei
-- **Leistungsverteilung Balkendiagramm**
+  - Anzeige der Leistungskurve wahlweise in W oder W/kg
+- **"Time-in-Zone" Analyse**
+  - Zeit in Leistungszonen
+  - Zeit in Herzfrequenzzonen
     
 ### Drag and Drop / Upload-Button
 - Implementieren einer Drag-and-Drop-Funktionalität, um Benutzerinteraktionen zu erleichtern

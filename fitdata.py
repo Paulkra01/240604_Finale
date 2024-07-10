@@ -71,11 +71,11 @@ def get_power_zones(ftp):
 def get_heart_rate_zones(max_hr):
     """Definiere die Herzfrequenzzonen basierend auf maximaler Herzfrequenz."""
     zones = {
-        'Zone 1': (0, 0.60 * max_hr),
-        'Zone 2': (0.60 * max_hr, 0.70 * max_hr),
-        'Zone 3': (0.70 * max_hr, 0.80 * max_hr),
-        'Zone 4': (0.80 * max_hr, 0.90 * max_hr),
-        'Zone 5': (0.90 * max_hr, float('inf'))
+        'endurance': (0, 0.60 * max_hr),
+        'moderate': (0.60 * max_hr, 0.70 * max_hr),
+        'tempo': (0.70 * max_hr, 0.80 * max_hr),
+        'threshold': (0.80 * max_hr, 0.90 * max_hr),
+        'anaerobic': (0.90 * max_hr, float('inf'))
     }
     return zones
 

@@ -164,7 +164,7 @@ try:
                             col1, col2, col3 = st.columns(3)
 
                             with col1:
-                                ftp = st.number_input('Geben Sie Ihre Functional Threshold Power (FTP) ein:', min_value=0)
+                                ftp = st.slider('FTP', 0, 500, 350)
                         
 
 

@@ -1,27 +1,20 @@
-
-from PIL import Image
 from PIL import Image
 import streamlit as st
 import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
-import json
 import read_person_data as rpd
 import ekgdata as ekg
-import person
-import fitparse
 import pandas as pd
+import datetime
 import fitdata as fit
 st.set_page_config(layout="wide",page_title="Hauptseite", page_icon=":bar_chart:")
-import pickle
-from pathlib import Path
-from PIL import Image, ImageDraw, ImageOps
-import streamlit_authenticator as stauth
 from device_dection import add_device_detection
 from login import sign_up, fetch_users
 import streamlit_authenticator as stauth
 
 person_names = rpd.get_person_list(rpd.load_person_data())
+
 # Führe die Geräteerkennungsfunktion aus
 add_device_detection()
 
@@ -37,7 +30,7 @@ try:
     credentials = {'usernames': {}}
     for user_id, user_data in users.items():
         credentials['usernames'][user_data['username']] = {
-            'name': user_id,  # Verwende user_id als 'name' (besser wäre jedoch email oder eine eindeutige ID)
+            'name': user_id,  
             'password': user_data['password']
         }
 
@@ -63,7 +56,7 @@ try:
     elif username:
         if username in usernames: 
             if authentication_status:
-                st.sidebar.subheader(f'Welcome {username}')
+                st.sidebar.subheader(f'Herzlich Willkommen {username}')
                 Authenticator.logout('Log Out', 'sidebar')
 
                 def tab1_content():
@@ -100,7 +93,10 @@ try:
 
                         # TODO: Personendaten anzeigen
                                 person_birthyear = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)['date_of_birth']
-                                st.write(f"Geburtsjahr: {person_birthyear} ")
+                                current_year = datetime.datetime.now().year
+                                age = current_year - int(person_birthyear)
+                                st.write(f"Geburtsjahr: {person_birthyear}")
+                                st.write(f"Alter: {age}")
 
                         # Öffne EKG-Daten
                         # TODO: Für eine Person gibt es ggf. mehrere EKG-Daten. Diese müssen über den Pfad ausgewählt werden können
@@ -121,30 +117,11 @@ try:
                         # Pfad zur Bilddatei
                                 if st.session_state.aktuelle_versuchsperson in person_names:
                                     st.session_state.picture_path = rpd.find_person_data_by_name(st.session_state.aktuelle_versuchsperson)["picture_path"]
-                            # st.write("Der Pfad ist: ", st.session_state.picture_path)
 
-
-
-                                from PIL import Image
                                 image = Image.open(st.session_state.picture_path)
-
-                    # # HTML String für Bild
-                    #     st.markdown(
-                    #         f"""
-                    #         <div style="display: flex; justify-content: center;">
-                    #             <img src="{st.session_state.picture_path}" alt="{st.session_state.aktuelle_versuchsperson}" style="max-width: 100%;">
-                    #         </div>
-                    #         """,
-                    #         unsafe_allow_html=True
-                    #     )
-
                                 st.image(image, caption=st.session_state.aktuelle_versuchsperson)
-                        # st.caption(st.session_state.aktuelle_versuchsperson)
-
-
-
-
-                    #%% EKG-Daten als Matplotlib Plot anzeigen
+                        
+     ### EKG-Daten als Matplotlib Plot anzeigen
                     # Nachdem die EKG, Daten geladen wurden
                     # Erstelle den Plot als Attribut des Objektes
                             if st.button("Graphen laden"):
@@ -262,13 +239,13 @@ try:
                             main_page()
             else:
                 with info:
-                    st.error('Incorrect Password or username')
+                    st.error('Falsches Passwort')
         else:
             with info:
-                st.warning('Username does not exist, Please Sign up')
+                st.warning('Username nicht gefunden')
     else:
         with info:
-            st.warning('Please feed in your credentials')
+            st.warning('Bitte einloggen')
 
 except Exception as e:
     st.error(f'Error: {e}')

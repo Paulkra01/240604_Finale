@@ -47,7 +47,3 @@
   - Benutzerfreundliche Eingabefelder für Gewicht und FTP-Werte
   - übersichtlich dargestellte Analyseergebnisse
 
-### Interaktive Elemente
-- **Zoom-Option:**
-  - Interaktive Zoom-Funktion bei der Liste der Maximal-/Bestwerte
-

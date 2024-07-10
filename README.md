@@ -48,7 +48,7 @@
 
 
 
-# Ablauf Auf unserem Streamlit-Dashboard
+# Ablauf auf unserem Streamlit-Dashboard
 
 ## Login
 
@@ -67,8 +67,10 @@
 
 ### Tab1: Main Dashboard
 - Nach erfolgreichem Login wird das Hauptdashboard angezeigt
+- User aus dem JSON file werden angezeigt es können verschieden Tests ausgewählt werden oder der User gewechselt werden
+- Geburtsjahr und Alter werden angezeigt um die Daten in Kontext zu setzen 
 - leider konnten wir die langen Ladezeiten nicht verkürzen
-- Anzeigen des Profilbildes im Dashboard
+- das aktuelle Profilbild im Dashboard wird angezeigt
 
 
 

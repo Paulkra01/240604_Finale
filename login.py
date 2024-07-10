@@ -153,8 +153,8 @@ def sign_up():
 
         btn1, bt2, btn3, btn4, btn5 = st.columns(5)
 
-        with btn3:
-            st.form_submit_button('Sign Up')
+        # with btn3:
+        #     st.form_submit_button('Sign Up')
 #     # Button zum Einloggen
 #         login_page = st.button("Login")
 #     # Button zum Speichern eines neuen Benutzernamens

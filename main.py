@@ -160,7 +160,6 @@ try:
                 def tab2_content():
                     
                             st.header("Leistungsanalyse")
-                            st.write("test")
 
                             col1, col2, col3 = st.columns(3)
 

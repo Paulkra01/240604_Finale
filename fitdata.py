@@ -2,6 +2,7 @@ import fitparse
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import numpy as np
 
 def load_fitfile(file):
     """Lade und analysiere eine FIT-Datei."""
@@ -113,5 +114,52 @@ def create_PC(best_values):
         yaxis_title="Power / W",
         # xaxis_type="log"
     )
-    
     return fig
+
+
+def calc_aedc(power_values, hr_values):
+    # Split data into two halves
+    midpoint = len(power_values) // 2
+    first_half_power = power_values[:midpoint]
+    second_half_power = power_values[midpoint:]
+    first_half_hr = hr_values[:midpoint]
+    second_half_hr = hr_values[midpoint:]
+    # Calculate average power and heart rate for each half
+    avg_power_first_half = sum(first_half_power) / len(first_half_power)
+    avg_power_second_half = sum(second_half_power) / len(second_half_power)
+    avg_hr_first_half = sum(first_half_hr) / len(first_half_hr)
+    avg_hr_second_half = sum(second_half_hr) / len(second_half_hr)
+    # Calculate aerobic decoupling
+    aerobic_decoupling = (avg_hr_second_half - avg_hr_first_half) / (avg_power_second_half - avg_power_first_half)    
+    return aerobic_decoupling
+
+
+def calculate_average_power(power_values, window_size=30):
+    num_windows = len(power_values) - window_size + 1
+    average_power = np.mean([np.mean(power_values[i:i+window_size]) for i in range(num_windows)])
+    return average_power
+
+def calculate_variability_index(power_values, average_power):
+    vi = np.sqrt(np.mean(np.square(power_values - average_power))) / average_power
+    return vi
+
+def calculate_np(average_power, variability_index):
+    npower = average_power * (1 + variability_index)
+    return npower
+
+
+
+# def get_np(power_values):
+#     z = 0
+#     for i in range(len(power_values)-30):
+#         z += getAvg(watts,i,i+30)**4
+#     return (z/(end-30-start))**0.25
+
+
+# # gibt den Intensity Factor aus
+# def getIF(ftp):
+#    return calculate_np/ftp
+   
+# # gibt den TraingingStressScore aus (Achtung stops)
+# def getTSS(ftp):
+#    return ((end-start)/3600*calculate_np(ftp))*getIF(ftp)/ftp*100

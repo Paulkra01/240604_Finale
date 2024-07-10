@@ -200,6 +200,7 @@ except:
                 with col3:
                     weight = st.number_input('Geben Sie Ihr Körpergewicht in kg ein:', min_value=0)
 
+
                 st.title("FIT-Datei Drag-and-Drop")
 
             # Datei-Uploader für FIT-Dateien
@@ -208,54 +209,74 @@ except:
                 if uploaded_file is not None:
             # Zeige Dateidetails an
                     st.write("Dateiname:", uploaded_file.name)
-                    st.write("Dateityp:", uploaded_file.type)
                     st.write("Dateigröße:", uploaded_file.size, "Bytes")
 
             # Lade und analysiere die FIT-Datei
                     time_values, power_values, hr_values = fit.load_fitfile(uploaded_file)
+                    # Berechne die fortlaufenden Bestwerte über alle Zeitintervalle
+                    best_values = fit.calculate_continuous_best_values(time_values, power_values)
+                    best_values_wkg = [(interval, power / weight if weight > 0 else 0) for interval, power in best_values]
 
 
                 if st.button("Graph laden"):
                     if ftp > 0 and max_hr > 0:
-                # Erstelle einen Plotly-Graphen für die Leistungsdaten
+                        # Erstelle einen Plotly-Graphen für die Leistungsdaten
                         fig = fit.create_power_plot(time_values, power_values)
                         st.plotly_chart(fig)
 
-                # Berechne die Zeit in den verschiedenen Leistungszonen
+                        # Berechne die Zeit in den verschiedenen Leistungszonen
                         power_zones = fit.get_power_zones(ftp)
                         time_in_power_zones = fit.calculate_time_in_zones(power_values, power_zones)
 
-                # Berechne die Zeit in den verschiedenen Herzfrequenzzonen
+                        # Berechne die Zeit in den verschiedenen Herzfrequenzzonen
                         hr_zones = fit.get_heart_rate_zones(max_hr)
                         time_in_hr_zones = fit.calculate_time_in_zones(hr_values, hr_zones)
 
-                # Erstelle Balkendiagramme für die Zeit in den Zonen
+                        # Erstelle Balkendiagramme für die Zeit in den Zonen
                         power_bar_chart = fit.create_time_in_zone_bar_chart(time_in_power_zones, 'Time in Power Zones')
                         hr_bar_chart = fit.create_time_in_zone_bar_chart(time_in_hr_zones, 'Time in Heart Rate Zones')
 
-                # Zeige die Balkendiagramme nebeneinander an
+                        # Zeige die Balkendiagramme nebeneinander an
                         col1, col2 = st.columns(2)
                         col1.plotly_chart(power_bar_chart, use_container_width=True)
                         col2.plotly_chart(hr_bar_chart, use_container_width=True)
-
-                # Auswahl der Darstellung für die Bestwerte (Watt oder W/kg)
-                        display_mode = st.radio("Bestwerte anzeigen als:", ("Watt", "W/kg"))
-
-                # Berechne die fortlaufenden Bestwerte über alle Zeitintervalle
-                        best_values = fit.calculate_continuous_best_values(time_values, power_values)
-
-                        if display_mode == "W/kg":
-                            if weight > 0:
-                                best_values = [(interval, power / weight) for interval, power in best_values]
-                            else:
-                                st.error("Bitte geben Sie ein gültiges Körpergewicht ein.")
-                                best_values = [(interval, 0) for interval, power in best_values]
-
-                # Erstelle und zeige das Liniendiagramm für die Bestwerte an
-                        best_values_plot = fit.create_continuous_best_values_plot(best_values)
-                        st.plotly_chart(best_values_plot)
                     else:
                         st.error("Bitte geben Sie sowohl einen gültigen FTP-Wert als auch eine gültige maximale Herzfrequenz ein.")
+
+
+                # Auswahl der Darstellung für die Bestwerte (Watt oder W/kg) mit einem Toggle-Regler
+                if ftp > 0 and max_hr > 0 and uploaded_file is not None:
+                    # display_mode = st.radio(
+                    #     "Bestwerte anzeigen als:",
+                    #     ("Watt", "W/kg"),
+                    #     index=0,
+                    #     horizontal=True
+                    # )
+
+                    # # Erstelle und zeige das Liniendiagramm für die Bestwerte basierend auf der Auswahl an
+                    # if display_mode == "Watt":
+                    #     best_values_plot = fit.create_continuous_best_values_plot(best_values)
+                    # else:
+                    #     best_values_plot = fit.create_continuous_best_values_plot(best_values_wkg)
+
+
+
+                    display_mode = st.toggle("W/kg")
+
+                    # Erstelle und zeige das Liniendiagramm für die Bestwerte basierend auf der Auswahl an
+                    if display_mode:
+                        best_values_plot = fit.create_continuous_best_values_plot(best_values_wkg)
+                    else:
+                        best_values_plot = fit.create_continuous_best_values_plot(best_values)
+
+                    st.plotly_chart(best_values_plot)
+
+
+
+
+
+
+
 
     def main_page():
                     st.title('Datenauswertung')

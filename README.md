@@ -55,7 +55,7 @@
 ### Profilverwaltung
 - **Welcome Page mit Login-Option:**
   - Eingabefelder für Username und passwort
-  - Falls das Profil nicht vorhanden ist, wird ein neues Profil im MongoDB (Atlas) angelegt mit
+  - Falls das Profil nicht vorhanden ist, wird ein neues Profil im MongoDB (Atlas) angelegt mit:
                 - Email
                 - Username
                 - Passwort
